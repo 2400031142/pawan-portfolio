@@ -1,22 +1,16 @@
 /**
- * Client-Side JavaScript Application - Narala Pawan Portfolio
- * Advanced, human-crafted interactive features & dynamic UI components.
+ * Editorial Client Application Script - Narala Pawan Portfolio
+ * Clean, maintainable JavaScript handling themes, navigation, filtering, modal views, contact, and admin dashboard.
  */
 
 const GOOGLE_APPS_SCRIPT_URL = '';
 const LOCAL_STORAGE_KEY = 'portfolioContactResponses';
 const THEME_STORAGE_KEY = 'themePreference';
 
-let soundEnabled = true;
-
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
-  initSoundFX();
-  initHeroCanvas();
-  initHeroTyping();
   initNavigation();
   renderContent();
-  initDeveloperTerminal();
   initSkillSearch();
   initProjectFiltersAndModal();
   initProjectEstimator();
@@ -26,152 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* -------------------------------------------------------------
- * 1. Web Audio API Sound FX Synthesizer
- * ------------------------------------------------------------- */
-function initSoundFX() {
-  const soundBtn = document.getElementById('soundToggleBtn');
-  if (!soundBtn) return;
-
-  soundBtn.addEventListener('click', () => {
-    soundEnabled = !soundEnabled;
-    soundBtn.textContent = soundEnabled ? '🔊' : '🔇';
-    soundBtn.classList.toggle('active', soundEnabled);
-    if (soundEnabled) playAudioTone(600, 0.05);
-  });
-}
-
-function playAudioTone(freq = 440, duration = 0.08) {
-  if (!soundEnabled) return;
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    gain.gain.setValueAtTime(0.05, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start();
-    osc.stop(ctx.currentTime + duration);
-  } catch (e) {
-    // Silent catch if Web Audio disabled by browser autoplay policies
-  }
-}
-
-/* -------------------------------------------------------------
- * 2. Interactive Canvas Particle Background
- * ------------------------------------------------------------- */
-function initHeroCanvas() {
-  const canvas = document.getElementById('heroCanvas');
-  if (!canvas) return;
-
-  const ctx = canvas.getContext('2d');
-  let width = canvas.width = window.innerWidth;
-  let height = canvas.height = canvas.parentElement.offsetHeight || 600;
-
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = canvas.parentElement.offsetHeight || 600;
-  });
-
-  const particles = [];
-  const particleCount = Math.min(Math.floor(width / 25), 45);
-
-  for (let i = 0; i < particleCount; i++) {
-    particles.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.6,
-      vy: (Math.random() - 0.5) * 0.6,
-      radius: Math.random() * 2 + 1
-    });
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = 'rgba(99, 102, 241, 0.4)';
-    ctx.strokeStyle = 'rgba(99, 102, 241, 0.08)';
-
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-
-      if (p.x < 0 || p.x > width) p.vx *= -1;
-      if (p.y < 0 || p.y > height) p.vy *= -1;
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fill();
-
-      for (let j = i + 1; j < particles.length; j++) {
-        const p2 = particles[j];
-        const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-        if (dist < 130) {
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.stroke();
-        }
-      }
-    }
-    requestAnimationFrame(animate);
-  }
-
-  animate();
-}
-
-/* -------------------------------------------------------------
- * 3. Hero Typing Animation
- * ------------------------------------------------------------- */
-function initHeroTyping() {
-  const typingElement = document.getElementById('heroTypingText');
-  if (!typingElement) return;
-
-  const phrases = [
-    'Freelance Web Developer',
-    'Full Stack Developer',
-    'React & Java Specialist',
-    'Building for Rajahmundry Businesses'
-  ];
-
-  let phraseIndex = 0;
-  let charIndex = 0;
-  let isDeleting = false;
-
-  function type() {
-    const currentPhrase = phrases[phraseIndex];
-    if (isDeleting) {
-      typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
-      charIndex--;
-    } else {
-      typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
-      charIndex++;
-    }
-
-    let typeSpeed = isDeleting ? 40 : 80;
-
-    if (!isDeleting && charIndex === currentPhrase.length) {
-      typeSpeed = 1800; // Pause at end of phrase
-      isDeleting = true;
-    } else if (isDeleting && charIndex === 0) {
-      isDeleting = false;
-      phraseIndex = (phraseIndex + 1) % phrases.length;
-      typeSpeed = 400;
-    }
-
-    setTimeout(type, typeSpeed);
-  }
-
-  type();
-}
-
-/* -------------------------------------------------------------
- * 4. Theme & Navigation
+ * 1. Theme Management (Light/Dark Mode)
  * ------------------------------------------------------------- */
 function initTheme() {
   const themeBtn = document.getElementById('themeToggleBtn');
@@ -185,7 +34,6 @@ function initTheme() {
   applyTheme(currentTheme);
 
   themeBtn.addEventListener('click', () => {
-    playAudioTone(700, 0.06);
     currentTheme = htmlTag.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     applyTheme(currentTheme);
     localStorage.setItem(THEME_STORAGE_KEY, currentTheme);
@@ -197,6 +45,9 @@ function initTheme() {
   }
 }
 
+/* -------------------------------------------------------------
+ * 2. Mobile Navigation & Active Link Tracking
+ * ------------------------------------------------------------- */
 function initNavigation() {
   const mobileBtn = document.getElementById('mobileToggleBtn');
   const navMenu = document.getElementById('navMenu');
@@ -208,7 +59,6 @@ function initNavigation() {
 
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
-      playAudioTone(500, 0.05);
       navMenu.classList.remove('active');
       navLinks.forEach(l => l.classList.remove('active'));
       link.classList.add('active');
@@ -217,7 +67,7 @@ function initNavigation() {
 }
 
 /* -------------------------------------------------------------
- * 5. Render Data & Interactive Project Simulators
+ * 3. Render Data from PORTFOLIO_DATA (data.js)
  * ------------------------------------------------------------- */
 function renderContent() {
   if (typeof PORTFOLIO_DATA === 'undefined') return;
@@ -228,14 +78,20 @@ function renderContent() {
     interestsContainer.innerHTML = PORTFOLIO_DATA.profile.interests
       .map(item => `
         <div className="interest-item">
-          <span>⚡</span>
+          <span>•</span>
           <span>${escapeHTML(item)}</span>
         </div>
       `).join('');
   }
 
+  // Render Skills
   renderSkills(PORTFOLIO_DATA.skills);
+
+  // Render Projects
   renderProjects(PORTFOLIO_DATA.projects);
+
+  // Render Qualifications
+  renderQualifications(PORTFOLIO_DATA.qualifications);
 }
 
 function renderSkills(skillsArray) {
@@ -245,10 +101,7 @@ function renderSkills(skillsArray) {
   skillsContainer.innerHTML = skillsArray
     .map(skill => `
       <div className="skill-card">
-        <div className="skill-header">
-          <span className="skill-icon">${skill.icon}</span>
-          <h3 className="skill-category">${escapeHTML(skill.category)}</h3>
-        </div>
+        <h3 className="skill-category">${escapeHTML(skill.category)}</h3>
         <div className="skill-tags">
           ${skill.items.map(i => `
             <div className="skill-pill-item" data-skill-name="${escapeHTML(i.name.toLowerCase())}">
@@ -266,225 +119,49 @@ function renderProjects(projectsArray) {
   if (!projectsContainer || !projectsArray) return;
 
   projectsContainer.innerHTML = projectsArray
-    .map(proj => {
-      let simHtml = '';
-      if (proj.id === 'rfid-door-lock') {
-        simHtml = `
-          <div className="card-simulator-box">
-            <button className="sim-btn btn-secondary" onclick="event.stopPropagation(); simulateRFIDScan('${proj.id}')">
-              <span>💳 Scan NFC Test Card</span>
-            </button>
-            <div id="sim-status-${proj.id}" className="sim-status" style="color: var(--text-muted);">
-              Lock Status: 🔒 Secured (Standby)
-            </div>
-          </div>
-        `;
-      } else if (proj.id === 'pothole-detection') {
-        simHtml = `
-          <div className="card-simulator-box">
-            <button className="sim-btn btn-secondary" onclick="event.stopPropagation(); simulatePotholeScan('${proj.id}')">
-              <span>🎥 Toggle Dashcam AI Feed</span>
-            </button>
-            <div id="sim-status-${proj.id}" className="sim-status" style="color: var(--text-muted);">
-              Vision Feed: 🟢 Clear Road (No Anomalies)
-            </div>
-          </div>
-        `;
-      } else if (proj.id === 'counterfeit-detection') {
-        simHtml = `
-          <div className="card-simulator-box">
-            <button className="sim-btn btn-secondary" onclick="event.stopPropagation(); simulateBlockchainVerify('${proj.id}')">
-              <span>🔍 Verify Serial #NX-8921</span>
-            </button>
-            <div id="sim-status-${proj.id}" className="sim-status" style="color: var(--text-muted);">
-              Ledger Status: ⚪ Awaiting Scan
-            </div>
-          </div>
-        `;
-      } else if (proj.id === 'helmet-power-lensed') {
-        simHtml = `
-          <div className="card-simulator-box">
-            <button className="sim-btn btn-secondary" onclick="event.stopPropagation(); simulateVisorToggle('${proj.id}')">
-              <span>🕶️ Switch Visor Optic Mode</span>
-            </button>
-            <div id="sim-status-${proj.id}" className="sim-status" style="color: var(--text-muted);">
-              Visor Mode: ☀️ Day UV Shield
-            </div>
-          </div>
-        `;
-      }
-
-      return `
-        <div className="project-card" data-project-id="${proj.id}" data-category="${proj.category}">
-          <div className="project-top">
-            <span className="project-icon">${proj.icon}</span>
-            <span className="project-badge" style="background-color: ${proj.badgeColor}">${escapeHTML(proj.categoryLabel)}</span>
-          </div>
-          <h3 className="project-title">${escapeHTML(proj.title)}</h3>
-          <p className="project-desc">${escapeHTML(proj.shortDesc)}</p>
-          
-          ${simHtml}
-
-          <div className="project-tags-row">
-            ${proj.techStack.slice(0, 3).map(t => `<span className="project-mini-tag">${escapeHTML(t)}</span>`).join('')}
-          </div>
-          <div className="project-footer" onclick="openProjectModal('${proj.id}')">
-            <span>View Technical Architecture & Specs</span>
-            <span>➔</span>
-          </div>
+    .map(proj => `
+      <div className="project-card" data-project-id="${proj.id}" data-category="${proj.category}">
+        <div className="project-top">
+          <span className="project-badge">${escapeHTML(proj.categoryLabel)}</span>
+          <span className="project-status">${escapeHTML(proj.status)}</span>
         </div>
-      `;
-    }).join('');
-}
+        <h3 className="project-title">${escapeHTML(proj.title)}</h3>
+        <p className="project-desc">${escapeHTML(proj.shortDesc)}</p>
+        <div className="project-tags-row">
+          ${proj.techStack.map(t => `<span className="project-mini-tag">${escapeHTML(t)}</span>`).join('')}
+        </div>
+        <div className="project-footer" onclick="openProjectModal('${proj.id}')">
+          <span>View Project Details</span>
+          <span>➔</span>
+        </div>
+      </div>
+    `).join('');
 
-/* Simulator Actions */
-window.simulateRFIDScan = function(projId) {
-  playAudioTone(880, 0.12);
-  const statusEl = document.getElementById(`sim-status-${projId}`);
-  if (!statusEl) return;
-  statusEl.innerHTML = '⚡ Scanning NFC UID [4B:8A:1C:99]...';
-  statusEl.style.color = '#38bdf8';
-
-  setTimeout(() => {
-    playAudioTone(1200, 0.15);
-    statusEl.innerHTML = '🔓 Lock Status: <strong>UNLOCKED [Access Granted]</strong>';
-    statusEl.style.color = '#10b981';
-  }, 700);
-};
-
-window.simulatePotholeScan = function(projId) {
-  playAudioTone(600, 0.1);
-  const statusEl = document.getElementById(`sim-status-${projId}`);
-  if (!statusEl) return;
-  statusEl.innerHTML = '🔍 Processing Canny Contours...';
-  statusEl.style.color = '#38bdf8';
-
-  setTimeout(() => {
-    playAudioTone(750, 0.1);
-    statusEl.innerHTML = '⚠️ Vision Feed: <strong>Pothole Detected (Lat: 16.98, Lon: 81.78)</strong>';
-    statusEl.style.color = '#f59e0b';
-  }, 600);
-};
-
-window.simulateBlockchainVerify = function(projId) {
-  playAudioTone(700, 0.1);
-  const statusEl = document.getElementById(`sim-status-${projId}`);
-  if (!statusEl) return;
-  statusEl.innerHTML = '🔗 Querying Smart Contract Hash...';
-  statusEl.style.color = '#38bdf8';
-
-  setTimeout(() => {
-    playAudioTone(950, 0.12);
-    statusEl.innerHTML = '✅ Ledger: <strong>Authentic Product Verified On-Chain</strong>';
-    statusEl.style.color = '#10b981';
-  }, 650);
-};
-
-window.simulateVisorToggle = function(projId) {
-  playAudioTone(650, 0.08);
-  const statusEl = document.getElementById(`sim-status-${projId}`);
-  if (!statusEl) return;
-  const isNight = statusEl.innerHTML.includes('Night');
-  if (isNight) {
-    statusEl.innerHTML = 'Visor Mode: ☀️ Day UV Shield';
-    statusEl.style.color = 'var(--text-muted)';
-  } else {
-    statusEl.innerHTML = 'Visor Mode: 🌙 Night High-Contrast Optic';
-    statusEl.style.color = '#a7f3d0';
-  }
-};
-
-/* -------------------------------------------------------------
- * 6. Interactive Developer Terminal
- * ------------------------------------------------------------- */
-function initDeveloperTerminal() {
-  const terminalBody = document.getElementById('terminalBody');
-  if (!terminalBody) return;
-
-  const introLines = PORTFOLIO_DATA?.profile?.terminalIntro || [
-    'Welcome to Narala Pawan\'s Terminal'
-  ];
-
-  terminalBody.innerHTML = introLines.map(l => `<div className="terminal-line system">${escapeHTML(l)}</div>`).join('');
-  appendPromptLine();
-
-  document.querySelectorAll('.chip-cmd').forEach(chip => {
-    chip.addEventListener('click', () => {
-      playAudioTone(650, 0.05);
-      const cmd = chip.getAttribute('data-cmd');
-      executeCommand(cmd);
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const projId = card.getAttribute('data-project-id');
+      openProjectModal(projId);
     });
   });
 }
 
-function appendPromptLine() {
-  const terminalBody = document.getElementById('terminalBody');
-  const promptRow = document.createElement('div');
-  promptRow.className = 'terminal-prompt-row';
-  promptRow.innerHTML = `
-    <span className="prompt-symbol">$</span>
-    <input type="text" className="terminal-input" placeholder="Type help, skills, projects, contact..." />
-  `;
-  terminalBody.appendChild(promptRow);
+function renderQualifications(qualArray) {
+  const container = document.getElementById('qualificationsContainer');
+  if (!container || !qualArray) return;
 
-  const input = promptRow.querySelector('.terminal-input');
-
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      playAudioTone(700, 0.05);
-      const cmd = input.value.trim().toLowerCase();
-      input.disabled = true;
-      executeCommand(cmd);
-    }
-  });
-}
-
-function executeCommand(cmd) {
-  const terminalBody = document.getElementById('terminalBody');
-  if (!cmd) return;
-
-  const userLine = document.createElement('div');
-  userLine.className = 'terminal-line';
-  userLine.innerHTML = `<span className="prompt-symbol">$</span> ${escapeHTML(cmd)}`;
-  terminalBody.appendChild(userLine);
-
-  let outputText = '';
-
-  switch (cmd) {
-    case 'help':
-      outputText = 'Available Commands:\n• bio       - Print developer summary\n• skills    - List technical skills\n• projects  - List featured projects\n• contact   - View contact information\n• clear     - Clear terminal screen';
-      break;
-    case 'bio':
-      outputText = `Name: ${PORTFOLIO_DATA.profile.name}\nTitle: ${PORTFOLIO_DATA.profile.title}\nLocation: ${PORTFOLIO_DATA.profile.location}\nFocus: Custom web development for Rajahmundry businesses & IoT full-stack applications.`;
-      break;
-    case 'skills':
-      outputText = 'Frontend: HTML5, CSS3, JS (ES6+), React\nBackend: Java, Spring Boot, REST APIs\nDatabases: SQL, MySQL, PostgreSQL\nTools: Git, GitHub, Figma, VS Code';
-      break;
-    case 'projects':
-      outputText = '1. RFID Door Lock Using NFC Card (Hardware/IoT)\n2. Pothole Detection System (Python/Road-Safety)\n3. Counterfeit Detection Using Blockchain (Solidity/Web3)\n4. Helmet with Power-Lensed Visor (Engineering Concept)';
-      break;
-    case 'contact':
-      outputText = 'Location: Rajahmundry, AP, India\nForm: Scroll down to Contact section to send a direct message.';
-      break;
-    case 'clear':
-      terminalBody.innerHTML = '';
-      appendPromptLine();
-      return;
-    default:
-      outputText = `Command not recognized: "${cmd}". Type "help" for a list of valid commands.`;
-  }
-
-  const outLine = document.createElement('div');
-  outLine.className = 'terminal-line output';
-  outLine.textContent = outputText;
-  terminalBody.appendChild(outLine);
-
-  appendPromptLine();
-  terminalBody.scrollTop = terminalBody.scrollHeight;
+  container.innerHTML = qualArray.map(q => `
+    <div className="qual-card">
+      <div className="qual-icon">🎓</div>
+      <div>
+        <h4 style="font-size: 1rem; margin-bottom: 0.2rem;">${escapeHTML(q.title)}</h4>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">${escapeHTML(q.issuer)} • <span style="color: var(--primary-color); font-weight: 600;">${escapeHTML(q.status)}</span></div>
+      </div>
+    </div>
+  `).join('');
 }
 
 /* -------------------------------------------------------------
- * 7. Interactive Skill Search & Project Filters
+ * 4. Interactive Skill Search & Project Filters
  * ------------------------------------------------------------- */
 function initSkillSearch() {
   const searchInput = document.getElementById('skillSearchInput');
@@ -510,7 +187,6 @@ function initProjectFiltersAndModal() {
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      playAudioTone(600, 0.05);
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
@@ -540,7 +216,6 @@ function initProjectFiltersAndModal() {
 }
 
 window.openProjectModal = function(projectId) {
-  playAudioTone(700, 0.08);
   const modal = document.getElementById('projectModal');
   const modalBody = document.getElementById('modalBody');
   if (!modal || !modalBody || typeof PORTFOLIO_DATA === 'undefined') return;
@@ -549,38 +224,32 @@ window.openProjectModal = function(projectId) {
   if (!proj) return;
 
   modalBody.innerHTML = `
-    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-      <span style="font-size: 2.5rem;">${proj.icon}</span>
-      <div>
-        <span style="font-size: 0.8rem; font-weight: 700; color: #ffffff; background-color: ${proj.badgeColor}; padding: 0.2rem 0.6rem; border-radius: 9999px;">
-          ${escapeHTML(proj.categoryLabel)}
-        </span>
-        <h2 style="font-size: 1.6rem; margin-top: 0.3rem;">${escapeHTML(proj.title)}</h2>
-      </div>
+    <div style="margin-bottom: 1.25rem;">
+      <span className="project-badge" style="margin-bottom: 0.5rem; display: inline-block;">
+        ${escapeHTML(proj.categoryLabel)}
+      </span>
+      <h2 style="font-size: 1.5rem;">${escapeHTML(proj.title)}</h2>
     </div>
 
-    <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.7; margin-bottom: 1.5rem;">
-      ${escapeHTML(proj.fullDesc)}
-    </p>
-
-    <div style="margin-bottom: 1.5rem;">
-      <h4 style="font-size: 1.05rem; margin-bottom: 0.6rem;">Key System Features:</h4>
-      <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
-        ${proj.features.map(f => `<li>${escapeHTML(f)}</li>`).join('')}
-      </ul>
+    <div style="margin-bottom: 1.25rem;">
+      <h4 style="font-size: 0.95rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.3rem;">Problem Addressed:</h4>
+      <p style="color: var(--text-main); font-size: 0.95rem; line-height: 1.6;">${escapeHTML(proj.problem)}</p>
     </div>
 
-    <div style="margin-bottom: 1.5rem;">
-      <h4 style="font-size: 1.05rem; margin-bottom: 0.6rem;">Hardware / Runtime Specifications:</h4>
-      <p style="background: var(--bg-surface-elevated); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; color: var(--text-main);">
-        ⚙️ ${escapeHTML(proj.hardwareSpecs)}
-      </p>
+    <div style="margin-bottom: 1.25rem;">
+      <h4 style="font-size: 0.95rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.3rem;">Solution &amp; Implementation:</h4>
+      <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">${escapeHTML(proj.solution)}</p>
+    </div>
+
+    <div style="margin-bottom: 1.25rem;">
+      <h4 style="font-size: 0.95rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.3rem;">My Specific Contribution:</h4>
+      <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">${escapeHTML(proj.contribution)}</p>
     </div>
 
     <div>
-      <h4 style="font-size: 1.05rem; margin-bottom: 0.6rem;">Technologies Used:</h4>
-      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-        ${proj.techStack.map(t => `<span style="background: var(--primary-light); color: var(--primary-color); border: 1px solid var(--primary-color); padding: 0.3rem 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">${escapeHTML(t)}</span>`).join('')}
+      <h4 style="font-size: 0.95rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">Technologies Used:</h4>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+        ${proj.techStack.map(t => `<span style="background: var(--bg-surface-elevated); border: 1px solid var(--border-color); padding: 0.3rem 0.65rem; border-radius: 4px; font-size: 0.85rem; color: var(--text-main);">${escapeHTML(t)}</span>`).join('')}
       </div>
     </div>
   `;
@@ -589,13 +258,12 @@ window.openProjectModal = function(projectId) {
 };
 
 function closeProjectModal() {
-  playAudioTone(450, 0.05);
   const modal = document.getElementById('projectModal');
   if (modal) modal.classList.remove('open');
 }
 
 /* -------------------------------------------------------------
- * 8. Interactive Project Estimator Widget
+ * 5. Freelance Project Estimator Widget
  * ------------------------------------------------------------- */
 function initProjectEstimator() {
   const options = document.querySelectorAll('.est-option');
@@ -606,7 +274,6 @@ function initProjectEstimator() {
 
   options.forEach(opt => {
     opt.addEventListener('click', () => {
-      playAudioTone(650, 0.05);
       opt.classList.toggle('selected');
       const checkSpan = opt.querySelector('.est-check');
       if (checkSpan) checkSpan.textContent = opt.classList.contains('selected') ? '✓' : '○';
@@ -626,18 +293,17 @@ function initProjectEstimator() {
     });
 
     amountSpan.textContent = `₹${totalPrice.toLocaleString('en-IN')} INR`;
-    timeSpan.textContent = `Estimated Delivery: ${totalDays > 0 ? totalDays : 0} Days`;
+    timeSpan.textContent = `${totalDays > 0 ? totalDays : 0} Days`;
 
     if (preFillBtn) {
       preFillBtn.onclick = () => {
-        playAudioTone(700, 0.08);
         const subjectInput = document.getElementById('contactSubject');
         const messageInput = document.getElementById('contactMessage');
         const contactSection = document.getElementById('contact');
 
-        if (subjectInput) subjectInput.value = 'Freelance Project Quote Request';
+        if (subjectInput) subjectInput.value = 'Freelance Website Inquiry';
         if (messageInput) {
-          messageInput.value = `Hi Pawan,\n\nI would like to request a quote for the following requirements:\n- ${selectedNames.join('\n- ')}\n\nEstimated Investment: ₹${totalPrice.toLocaleString('en-IN')} INR\nEstimated Delivery: ${totalDays} Days\n\nPlease let me know your availability.`;
+          messageInput.value = `Hi Pawan,\n\nI would like to request an initial quote for:\n- ${selectedNames.join('\n- ')}\n\nEstimated Budget: ₹${totalPrice.toLocaleString('en-IN')} INR\nEstimated Timeframe: ${totalDays} Days\n\nPlease let me know your availability.`;
         }
         if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
       };
@@ -648,7 +314,7 @@ function initProjectEstimator() {
 }
 
 /* -------------------------------------------------------------
- * 9. Contact Form & Admin Portal
+ * 6. Contact Form Handler (LocalStorage + Apps Script)
  * ------------------------------------------------------------- */
 function initContactForm() {
   const form = document.getElementById('contactForm');
@@ -660,7 +326,6 @@ function initContactForm() {
 
   document.querySelectorAll('.pill-opt').forEach(pill => {
     pill.addEventListener('click', () => {
-      playAudioTone(600, 0.05);
       document.querySelectorAll('.pill-opt').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
       subjectInput.value = pill.getAttribute('data-subject');
@@ -677,18 +342,15 @@ function initContactForm() {
     const message = document.getElementById('contactMessage').value.trim();
 
     if (!name || !email || !subject || !message) {
-      playAudioTone(350, 0.1);
       showAlert(alertBox, 'Please fill out all required form fields.', 'error');
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      playAudioTone(350, 0.1);
       showAlert(alertBox, 'Please enter a valid email address.', 'error');
       return;
     }
 
-    playAudioTone(850, 0.1);
     submitBtn.disabled = true;
     btnText.style.display = 'none';
     btnSpinner.style.display = 'inline-block';
@@ -756,6 +418,9 @@ function getFromLocalStorage() {
   }
 }
 
+/* -------------------------------------------------------------
+ * 7. Admin Access Portal & Response Dashboard
+ * ------------------------------------------------------------- */
 function initAdminPortal() {
   const loginForm = document.getElementById('adminLoginForm');
   const loginView = document.getElementById('adminLoginView');
@@ -774,25 +439,21 @@ function initAdminPortal() {
     const pass = document.getElementById('adminPass').value.trim();
 
     if (user === 'admin' && pass === 'pawan123') {
-      playAudioTone(900, 0.1);
       loginView.classList.add('hidden');
       dashboardView.classList.remove('hidden');
       loadAdminResponses();
     } else {
-      playAudioTone(350, 0.1);
       showAlert(adminAlert, 'Invalid administrator credentials. Try username: admin, password: pawan123', 'error');
     }
   });
 
   logoutBtn.addEventListener('click', () => {
-    playAudioTone(500, 0.05);
     dashboardView.classList.add('hidden');
     loginView.classList.remove('hidden');
     loginForm.reset();
   });
 
   refreshBtn.addEventListener('click', () => {
-    playAudioTone(600, 0.05);
     loadAdminResponses();
   });
 
@@ -823,12 +484,12 @@ function loadAdminResponses(filterQuery = '') {
     );
   }
 
-  countSpan.textContent = `Total Responses: ${responses.length}`;
+  countSpan.textContent = `Total Messages: ${responses.length}`;
 
   if (responses.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 2rem; color: var(--text-muted); background: var(--bg-surface-elevated); border-radius: var(--radius-md);">
-        📭 No form responses found.
+        📭 No form messages found.
       </div>
     `;
     return;
@@ -848,10 +509,9 @@ function loadAdminResponses(filterQuery = '') {
 }
 
 function exportResponsesToCSV() {
-  playAudioTone(800, 0.1);
   const responses = getFromLocalStorage();
   if (responses.length === 0) {
-    alert('No contact responses available to export.');
+    alert('No contact messages available to export.');
     return;
   }
 
@@ -873,10 +533,20 @@ function exportResponsesToCSV() {
   const csvContent = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvRows.join('\n'));
   const link = document.createElement('a');
   link.setAttribute('href', csvContent);
-  link.setAttribute('download', `contact_responses_${Date.now()}.csv`);
+  link.setAttribute('download', `contact_messages_${Date.now()}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+function showAlert(element, text, type) {
+  element.textContent = text;
+  element.className = `alert-message alert-${type} show`;
+}
+
+function hideAlert(element) {
+  element.className = 'alert-message';
+  element.textContent = '';
 }
 
 function escapeHTML(str) {

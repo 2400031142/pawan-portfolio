@@ -1,6 +1,6 @@
 /**
- * Portfolio Data & Content Store - Narala Pawan
- * Grounded, authentic project data with genuine hardware and software specifications.
+ * Personal Portfolio Data - Narala Pawan
+ * Grounded, believable developer content and project specifications.
  */
 
 const PORTFOLIO_DATA = {
@@ -8,15 +8,10 @@ const PORTFOLIO_DATA = {
     name: 'Narala Pawan',
     title: 'Freelance Web Developer | Full Stack Developer',
     location: 'Rajahmundry, Andhra Pradesh, India',
-    bio: 'Web developer based in Rajahmundry with a strong focus on practical full-stack web applications and hardware-integrated software projects. I build custom, responsive websites for local businesses and develop reliable software for college engineering assignments.',
-    terminalIntro: [
-      'Welcome to Narala Pawan\'s Interactive Terminal v2.4',
-      'Type "help" or click any shortcut button below to explore.'
-    ],
+    bio: 'Web developer based in Rajahmundry, Andhra Pradesh. I build responsive, functional web applications for local businesses and develop software prototypes for academic and engineering projects.',
     interests: [
-      'Custom website development for local Rajahmundry businesses',
-      'Frontend web applications with React & modern CSS',
-      'Full-stack Java & Spring Boot application architecture',
+      'Website development for local Rajahmundry businesses',
+      'Full-stack web applications using React, Java, and Spring Boot',
       'Hardware-integrated software & IoT prototypes',
       'Relational database design (MySQL & PostgreSQL)'
     ]
@@ -25,7 +20,6 @@ const PORTFOLIO_DATA = {
   skills: [
     {
       category: 'Frontend Development',
-      icon: '🎨',
       items: [
         { name: 'HTML5', level: 'Advanced' },
         { name: 'CSS3 / Flexbox / Grid', level: 'Advanced' },
@@ -35,16 +29,14 @@ const PORTFOLIO_DATA = {
     },
     {
       category: 'Backend Development',
-      icon: '⚙️',
       items: [
         { name: 'Java', level: 'Intermediate' },
         { name: 'Spring Boot', level: 'Intermediate' },
-        { name: 'RESTful API Design', level: 'Intermediate' }
+        { name: 'REST APIs', level: 'Intermediate' }
       ]
     },
     {
-      category: 'Databases & Storage',
-      icon: '🗄️',
+      category: 'Databases',
       items: [
         { name: 'SQL', level: 'Advanced' },
         { name: 'MySQL', level: 'Intermediate' },
@@ -52,24 +44,20 @@ const PORTFOLIO_DATA = {
       ]
     },
     {
-      category: 'Tools & Workflows',
-      icon: '🛠️',
+      category: 'Developer Tools',
       items: [
         { name: 'Git & GitHub', level: 'Advanced' },
-        { name: 'Figma (UI Layouts)', level: 'Intermediate' },
+        { name: 'Figma', level: 'Intermediate' },
         { name: 'Vite / NPM', level: 'Intermediate' },
         { name: 'VS Code', level: 'Advanced' }
       ]
-    },
-    {
-      category: 'Certifications & Coursework',
-      icon: '📜',
-      items: [
-        { name: 'AWS Foundational Certification', level: 'Certified' },
-        { name: 'Coursera Programming Coursework', level: 'Completed' },
-        { name: 'Cisco IT Fundamentals Coursework', level: 'Completed' }
-      ]
     }
+  ],
+
+  qualifications: [
+    { title: 'AWS Foundational Certification', issuer: 'Amazon Web Services', status: 'Certified' },
+    { title: 'Programming & Technology Coursework', issuer: 'Coursera', status: 'Completed' },
+    { title: 'Networking & IT Fundamentals', issuer: 'Cisco', status: 'Completed' }
   ],
 
   projects: [
@@ -77,19 +65,13 @@ const PORTFOLIO_DATA = {
       id: 'rfid-door-lock',
       title: 'RFID Door Lock Using NFC Card',
       category: 'hardware',
-      categoryLabel: 'IoT & Hardware',
-      badgeColor: '#ec4899',
-      icon: '🚪',
-      shortDesc: 'Wireless door lock security system utilizing NFC/RFID card UID validation and solenoid relay actuation.',
-      fullDesc: 'A hardware access-control system designed to replace traditional keys with wireless NFC/RFID cards. The system reads 13.56MHz RFID cards using an MFRC522 module interfaced with an Arduino microcontroller. Authorized UID tags trigger a 12V solenoid lock via a relay driver circuit.',
-      techStack: ['Arduino / C++', 'MFRC522 RFID Module', '12V Solenoid Lock', 'Relay Module', '16x2 LCD Display'],
-      features: [
-        'Instant UID tag scanning via SPI protocol',
-        'Master card mode to add or revoke authorized UIDs on EEPROM',
-        'Visual status messages on 16x2 LCD display',
-        'Audio feedback using piezoelectric buzzer'
-      ],
-      hardwareSpecs: 'MFRC522 Reader (13.56 MHz), 12V 1A DC Power Supply, 1-Channel Relay Module, Solenoid Bolt Lock.',
+      categoryLabel: 'IoT Project',
+      shortDesc: 'A hardware access-control system using RFID/NFC card UID validation to trigger a 12V solenoid lock mechanism.',
+      problem: 'Traditional mechanical keys can be duplicated or lost, making security management difficult for restricted areas.',
+      solution: 'Built an embedded controller using an MFRC522 RFID module connected to an Arduino. The controller checks scanned 13.56MHz card UIDs against stored EEPROM records and actuates a 12V solenoid lock via a relay driver.',
+      contribution: 'Designed microcontroller logic, implemented EEPROM whitelist storage, wired relay driver circuitry, and added status display outputs.',
+      techStack: ['Arduino C++', 'MFRC522 RFID Module', '12V Solenoid Lock', 'Relay Circuit', '16x2 LCD Display'],
+      status: 'Academic Hardware Prototype',
       githubUrl: null,
       liveUrl: null
     },
@@ -97,19 +79,13 @@ const PORTFOLIO_DATA = {
       id: 'pothole-detection',
       title: 'Pothole Detection System',
       category: 'python',
-      categoryLabel: 'Road Safety & Python',
-      badgeColor: '#3b82f6',
-      icon: '🛣️',
-      shortDesc: 'Automated road hazard monitoring system analyzing dashcam video feeds for real-time pothole identification.',
-      fullDesc: 'A computer-vision road monitoring concept intended for vehicle dashcams. It processes live or recorded camera frames to identify road surface anomalies and structural potholes, cataloging potential road hazards for municipal maintenance teams.',
+      categoryLabel: 'Road Safety / Python',
+      shortDesc: 'A road surface monitoring system analyzing camera video frames to identify potholes and log GPS coordinates.',
+      problem: 'Unmarked road potholes cause vehicle damage and road accidents, making early detection and municipal reporting critical.',
+      solution: 'Developed a Python computer-vision script using OpenCV. The algorithm processes video frames using grayscale conversion, Gaussian blur, and contour area analysis to detect surface depressions and record geotagged logs.',
+      contribution: 'Written image preprocessing pipeline, configured contour detection parameters, and implemented CSV geotag logging.',
       techStack: ['Python 3', 'OpenCV', 'Image Processing', 'CSV Geotagging'],
-      features: [
-        'Frame-by-frame grayscale conversion & Gaussian blur filtering',
-        'Canny edge detection and contour area thresholding',
-        'Bounding box overlay on detected road surface depressions',
-        'Automated logging of timestamp and GPS coordinates'
-      ],
-      hardwareSpecs: 'Standard 1080p Dashcam / Webcam, USB Video Class Receiver, Python Runtime Environment.',
+      status: 'Software Prototype',
       githubUrl: null,
       liveUrl: null
     },
@@ -117,19 +93,13 @@ const PORTFOLIO_DATA = {
       id: 'counterfeit-detection',
       title: 'Counterfeit Detection Using Blockchain',
       category: 'blockchain',
-      categoryLabel: 'Blockchain & Web3',
-      badgeColor: '#8b5cf6',
-      icon: '🔗',
-      shortDesc: 'Supply-chain item verification platform leveraging immutable smart contracts to eliminate fake goods.',
-      fullDesc: 'A decentralized application concept exploring how product authenticity can be verified from manufacturer to consumer. Products are tagged with unique cryptographic hashes stored on a blockchain ledger, preventing tamper attempts.',
-      techStack: ['Solidity', 'Ethereum Testnet', 'Web3.js', 'JavaScript UI', 'QR Code Engine'],
-      features: [
-        'Smart contract minting of unique product serial hashes',
-        'QR code generator for physical product packaging',
-        'Instant consumer QR scan lookup for provenance verification',
-        'Immutable history tracking manufacturer, distributor, and retailer handoffs'
-      ],
-      hardwareSpecs: 'Ethereum Testnet Nodes, Web3 Browser Extension (MetaMask), QR Code Scanner.',
+      categoryLabel: 'Blockchain Project',
+      shortDesc: 'A supply-chain item verification platform leveraging immutable smart contracts to verify product authenticity.',
+      problem: 'Counterfeit consumer products enter supply chains easily when serial numbers can be forged on central databases.',
+      solution: 'Explored a decentralized verification workflow where manufacturers register product cryptographic hashes on an Ethereum testnet. Consumers scan product QR codes to verify authenticity directly against the immutable ledger.',
+      contribution: 'Constructed Solidity smart contracts for serial hash registration, created Web3 verification functions, and designed frontend verification interface.',
+      techStack: ['Solidity', 'Ethereum Testnet', 'Web3.js', 'JavaScript UI', 'QR Code Generator'],
+      status: 'Concept & Prototype',
       githubUrl: null,
       liveUrl: null
     },
@@ -139,17 +109,12 @@ const PORTFOLIO_DATA = {
       category: 'engineering',
       categoryLabel: 'Engineering Concept',
       badgeColor: '#10b981',
-      icon: '🪖',
-      shortDesc: 'Ergonomic helmet design incorporating corrective power-lensed visor optics for enhanced rider vision.',
-      fullDesc: 'An innovative protective headgear concept addressing optical clarity for motorcycle riders with refractive vision errors. Integrates custom power-lensed optics directly into the helmet visor, reducing the need for spectacles while riding.',
-      techStack: ['Optical Engineering', 'Polycarbonate Lens Optics', 'UV400 Coating', '3D CAD Modeling'],
-      features: [
-        'Custom refractive power curvature integrated into high-impact polycarbonate',
-        'Anti-reflective & UV400 protective surface coating',
-        'Quick-release visor hinge mechanism for interchangeable lenses',
-        'Anti-fog ventilation airflow channels'
-      ],
-      hardwareSpecs: 'Polycarbonate Optical Grade Resin, Anti-scratch Hydrophobic Coating, DOT-certified Shell Interface.',
+      shortDesc: 'An optical safety helmet concept integrating corrective power-lensed visor optics for riders with vision errors.',
+      problem: 'Riders wearing corrective prescription glasses beneath motorcycle helmets experience discomfort, fogging, and restricted peripheral vision.',
+      solution: 'Proposed integrating custom optical power curvature into high-impact polycarbonate helmet visors with UV400 anti-glare coating and quick-release hinges.',
+      contribution: 'Researched optical lens integration parameters, visor housing specs, and ergonomic air-flow ventilation channels.',
+      techStack: ['Optical Engineering Specs', 'Polycarbonate Optics', 'UV400 Coating', '3D Design Model'],
+      status: 'Engineering Concept',
       githubUrl: null,
       liveUrl: null
     }

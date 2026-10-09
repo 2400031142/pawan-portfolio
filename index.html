@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Official Portfolio of Narala Pawan - Web Developer & Full Stack Developer based in Rajahmundry, Andhra Pradesh, India." />
+  <meta name="description" content="Official Portfolio of Narala Pawan - Freelance Web Developer & Full Stack Developer based in Rajahmundry, Andhra Pradesh, India." />
   <title>Narala Pawan — Personal Portfolio</title>
   
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>" />
@@ -35,15 +35,14 @@
           <li><a href="#about" className="nav-link">About</a></li>
           <li><a href="#skills" className="nav-link">Skills</a></li>
           <li><a href="#projects" className="nav-link">Projects</a></li>
-          <li><a href="#estimator" className="nav-link">Cost Estimator</a></li>
-          <li><a href="#resume" className="nav-link">Resume</a></li>
+          <li><a href="#estimator" className="nav-link">Estimator</a></li>
+          <li><a href="#qualifications" className="nav-link">Qualifications</a></li>
           <li><a href="#contact" className="nav-link">Contact</a></li>
-          <li><a href="#admin" className="nav-link">Admin</a></li>
+          <li><a href="#admin" className="nav-link">Admin Portal</a></li>
         </ul>
       </nav>
 
       <div className="nav-controls">
-        <button id="soundToggleBtn" className="ctrl-btn" title="Toggle Sound FX">🔊</button>
         <button id="themeToggleBtn" className="ctrl-btn" title="Toggle Light/Dark Theme">
           <span id="themeIcon">☀️</span>
         </button>
@@ -57,61 +56,44 @@
   <main>
     <!-- Hero Section -->
     <section id="home" className="hero-section">
-      <!-- Interactive Particle Canvas -->
-      <canvas id="heroCanvas"></canvas>
-
       <div className="container">
         <div className="hero-grid">
-          <!-- Left: Hero Text & Typing Animation -->
+          <!-- Left: Hero Text & Intro -->
           <div className="hero-content">
             <div className="hero-location">
               <span>📍 Rajahmundry, Andhra Pradesh, India</span>
             </div>
             <h1 className="hero-name">Narala Pawan</h1>
-            
-            <div className="typing-container">
-              <span id="heroTypingText" className="hero-typing"></span>
-            </div>
-
+            <h2 className="hero-role">Freelance Web Developer | Full Stack Developer</h2>
             <p className="hero-bio">
-              Developing functional web applications and hardware-integrated software prototypes. Building responsive websites for local businesses and modern full-stack systems.
+              Building responsive websites for local businesses and functional full-stack software prototypes. Specializing in frontend interfaces, Java backends, and relational database systems.
             </p>
             <div className="hero-actions">
-              <a href="#contact" className="btn btn-primary">
-                <span>Contact Me</span>
-                <span>✉️</span>
-              </a>
-              <a href="#projects" className="btn btn-secondary">
+              <a href="#projects" className="btn btn-primary">
                 <span>Explore Projects</span>
-                <span>🚀</span>
+                <span>➔</span>
               </a>
-              <a href="#estimator" className="btn btn-secondary">
-                <span>Estimate Project Cost</span>
-                <span>🧮</span>
+              <a href="#contact" className="btn btn-secondary">
+                <span>Get in Touch</span>
               </a>
             </div>
           </div>
 
-          <!-- Right: Interactive Developer Terminal -->
-          <div className="developer-terminal">
-            <div className="terminal-header">
-              <div className="terminal-dots">
-                <span className="dot dot-red"></span>
-                <span className="dot dot-yellow"></span>
-                <span className="dot dot-green"></span>
-              </div>
-              <span className="terminal-title">pawan@rajahmundry-dev: ~</span>
+          <!-- Right: Minimalist Code Preview Card -->
+          <div className="code-card">
+            <div className="code-card-header">
+              <span>developer-profile.js</span>
+              <span>JS</span>
             </div>
-            <div className="terminal-body" id="terminalBody">
-              <!-- Dynamically rendered terminal text -->
-            </div>
-            <div className="terminal-quick-cmds">
-              <span className="cmd-label">Quick Commands:</span>
-              <button className="chip-cmd" data-cmd="help">help</button>
-              <button className="chip-cmd" data-cmd="skills">skills</button>
-              <button className="chip-cmd" data-cmd="projects">projects</button>
-              <button className="chip-cmd" data-cmd="contact">contact</button>
-              <button className="chip-cmd" data-cmd="clear">clear</button>
+            <div className="code-card-body">
+              <div><span className="code-keyword">const</span> developer = {</div>
+              <div>&nbsp;&nbsp;<span className="code-prop">name</span>: <span className="code-str">'Narala Pawan'</span>,</div>
+              <div>&nbsp;&nbsp;<span className="code-prop">location</span>: <span className="code-str">'Rajahmundry, AP, India'</span>,</div>
+              <div>&nbsp;&nbsp;<span className="code-prop">role</span>: <span className="code-str">'Full Stack &amp; Freelance Web Dev'</span>,</div>
+              <div>&nbsp;&nbsp;<span className="code-prop">stack</span>: [<span className="code-str">'HTML'</span>, <span className="code-str">'CSS'</span>, <span className="code-str">'JS'</span>, <span className="code-str">'React'</span>, <span className="code-str">'Java'</span>, <span className="code-str">'SQL'</span>],</div>
+              <div>&nbsp;&nbsp;<span className="code-prop">availableForFreelance</span>: <span className="code-keyword">true</span></div>
+              <div>};</div>
+              <div style="margin-top: 0.75rem;"><span className="code-comment">// Ready to build practical web applications</span></div>
             </div>
           </div>
         </div>
@@ -124,14 +106,14 @@
         <div className="section-header">
           <span className="section-tag">About Me</span>
           <h2 className="section-title">Background &amp; Focus</h2>
-          <p className="section-desc">Grounded software development with real-world utility</p>
+          <p className="section-desc">Practical software development with real-world utility</p>
         </div>
 
         <div className="about-card">
-          <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-muted); margin-bottom: 1.5rem;">
-            Based in Rajahmundry, Andhra Pradesh, I am a freelance web developer and full-stack software enthusiast. I enjoy turning practical ideas into working code — from building clean, fast-loading responsive websites for local merchants to prototyping micro-controller IoT systems and Java Spring Boot applications.
+          <p style="font-size: 1.05rem; line-height: 1.75; color: var(--text-muted); margin-bottom: 1.5rem;">
+            Based in Rajahmundry, Andhra Pradesh, I focus on practical web development and software engineering projects. I enjoy creating fast, responsive websites for local merchants and businesses, as well as prototyping hardware-integrated software and relational database systems for college assignments.
           </p>
-          <h3 style="font-size: 1.15rem; margin-bottom: 1rem;">Primary Areas of Work &amp; Focus</h3>
+          <h3 style="font-size: 1.15rem; margin-bottom: 1rem;">Primary Areas of Focus</h3>
           <div className="interests-grid" id="interestsContainer">
             <!-- Dynamic items from js/data.js -->
           </div>
@@ -140,25 +122,22 @@
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" className="section" style="background: rgba(255, 255, 255, 0.015);">
+    <section id="skills" className="section">
       <div className="container">
         <div className="section-header">
           <span className="section-tag">Technical Competencies</span>
           <h2 className="section-title">Skills &amp; Technologies</h2>
-          <p className="section-desc">Tools, languages, and frameworks used in development</p>
+          <p className="section-desc">Categorized technologies and tools supported by actual project experience</p>
         </div>
 
-        <!-- Interactive Skills Search Bar -->
+        <!-- Skills Search Input -->
         <div className="skills-controls">
-          <div className="search-wrapper">
-            <span className="search-icon">🔍</span>
-            <input 
-              type="text" 
-              id="skillSearchInput" 
-              className="search-input" 
-              placeholder="Filter skills (e.g. React, SQL, Java, Git)..." 
-            />
-          </div>
+          <input 
+            type="text" 
+            id="skillSearchInput" 
+            className="search-input" 
+            placeholder="Filter skills (e.g. React, SQL, Java, Git)..." 
+          />
         </div>
 
         <div className="skills-grid" id="skillsContainer">
@@ -173,10 +152,10 @@
         <div className="section-header">
           <span className="section-tag">Featured Work</span>
           <h2 className="section-title">Academic &amp; Hardware Projects</h2>
-          <p className="section-desc">Test the live interactive simulators embedded directly inside each project card below!</p>
+          <p className="section-desc">Practical engineering, IoT, and software prototypes</p>
         </div>
 
-        <!-- Interactive Project Filter Tabs -->
+        <!-- Project Filter Tabs -->
         <div className="project-filters" id="projectFilters">
           <button className="filter-btn active" data-filter="all">All Projects</button>
           <button className="filter-btn" data-filter="hardware">IoT &amp; Hardware</button>
@@ -191,104 +170,94 @@
       </div>
     </section>
 
-    <!-- Project Modal Popup Overlay -->
+    <!-- Project Details Modal Overlay -->
     <div id="projectModal" className="modal-overlay" role="dialog" aria-modal="true">
       <div className="modal-container">
         <button id="modalCloseBtn" className="modal-close-btn" aria-label="Close details modal">&times;</button>
         <div id="modalBody">
-          <!-- Dynamically populated project modal content -->
+          <!-- Dynamically populated project detail content -->
         </div>
       </div>
     </div>
 
-    <!-- Interactive Project Cost & Estimator Widget Section -->
-    <section id="estimator" className="section" style="background: rgba(255, 255, 255, 0.015);">
+    <!-- Freelance Project Estimator Section -->
+    <section id="estimator" className="section">
       <div className="container">
         <div className="section-header">
           <span className="section-tag">Freelance Calculator</span>
-          <h2 className="section-title">Interactive Project Estimator</h2>
-          <p className="section-desc">Select requirements to calculate an instant cost &amp; timeline estimate for local business websites</p>
+          <h2 className="section-title">Project Cost &amp; Time Estimator</h2>
+          <p className="section-desc">Select website requirements to view an estimated investment and delivery timeframe for local business projects</p>
         </div>
 
         <div className="estimator-card">
-          <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Select Website Features &amp; Scope:</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem;">Tailored rates for small businesses &amp; local enterprises in AP</p>
+          <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Select Scope &amp; Features:</h3>
 
           <div className="estimator-options" id="estimatorOptions">
-            <div className="est-option selected" data-price="3500" data-days="3" data-name="Responsive Landing Page">
+            <div className="est-option selected" data-price="3500" data-days="3" data-name="Responsive Single Landing Page">
               <span className="est-check">✓</span>
               <div>
                 <strong style="display: block; font-size: 0.95rem;">Single Landing Page</strong>
-                <span style="font-size: 0.8rem; color: var(--text-muted);">Fast, mobile-ready single page</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Fast, mobile-responsive single page</span>
               </div>
             </div>
 
-            <div className="est-option" data-price="8000" data-days="6" data-name="Multi-Page Business Website">
+            <div className="est-option" data-price="8000" data-days="6" data-name="Multi-Page Business Site (3-5 Pages)">
               <span className="est-check">○</span>
               <div>
-                <strong style="display: block; font-size: 0.95rem;">Multi-Page Site (3-5 Pages)</strong>
+                <strong style="display: block; font-size: 0.95rem;">Multi-Page Business Site</strong>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Home, About, Services, Contact</span>
               </div>
             </div>
 
-            <div className="est-option" data-price="4000" data-days="2" data-name="Google Sheets Contact Backend">
+            <div className="est-option" data-price="4000" data-days="2" data-name="Form Storage (Google Sheets / SQL)">
               <span className="est-check">○</span>
               <div>
-                <strong style="display: block; font-size: 0.95rem;">Database Integration</strong>
-                <span style="font-size: 0.8rem; color: var(--text-muted);">Google Sheets / MySQL form storage</span>
+                <strong style="display: block; font-size: 0.95rem;">Form Database Storage</strong>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Google Sheets / MySQL form integration</span>
               </div>
             </div>
 
-            <div className="est-option" data-price="6000" data-days="4" data-name="React SPA & Component Design">
+            <div className="est-option" data-price="6000" data-days="4" data-name="React Single Page Application">
               <span className="est-check">○</span>
               <div>
-                <strong style="display: block; font-size: 0.95rem;">React Application</strong>
-                <span style="font-size: 0.8rem; color: var(--text-muted);">Dynamic state UI & animations</span>
+                <strong style="display: block; font-size: 0.95rem;">React SPA Architecture</strong>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Dynamic state management & UI</span>
               </div>
             </div>
           </div>
 
           <div className="est-result-box">
-            <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.3rem;">Estimated Project Investment &amp; Duration</div>
-            <div className="est-amount" id="estAmount">₹3,500 INR</div>
-            <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-top: 0.3rem;" id="estTime">Estimated Delivery: 3 Days</div>
-            
-            <button id="estPreFillBtn" className="btn btn-primary" style="margin-top: 1.25rem;">
-              <span>Request This Quote in Contact Form</span>
-              <span>✉️</span>
+            <div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Estimated Project Investment</div>
+              <div className="est-amount" id="estAmount">₹3,500 INR</div>
+            </div>
+            <div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Estimated Delivery Timeframe</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main);" id="estTime">3 Days</div>
+            </div>
+            <button id="estPreFillBtn" className="btn btn-primary">
+              <span>Request Quote in Contact Form</span>
             </button>
+          </div>
+
+          <div className="est-disclaimer">
+            ℹ️ <em>Note: Estimates are non-binding guidelines intended for initial project scoping. Final quotes are confirmed after reviewing project requirements.</em>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Resume Section -->
-    <section id="resume" className="section">
+    <!-- Qualifications & Certifications Section -->
+    <section id="qualifications" className="section">
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">Curriculum Vitae</span>
-          <h2 className="section-title">Resume &amp; Qualifications</h2>
-          <p className="section-desc">Summary of qualifications and practical experience</p>
+          <span className="section-tag">Qualifications</span>
+          <h2 className="section-title">Certifications &amp; Coursework</h2>
+          <p className="section-desc">Verified credentials and formal technology learning</p>
         </div>
 
-        <div className="resume-box">
-          <div className="resume-icon">📄</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Narala Pawan — Developer Resume</h3>
-          <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
-            Full Stack Web Developer | Rajahmundry, Andhra Pradesh
-          </p>
-
-          <div className="resume-notice">
-            <strong>ℹ️ Resume PDF File Notice:</strong>
-            <p style="margin-top: 0.4rem;">
-              To make your compiled PDF accessible for direct download, place <code>resume.pdf</code> in your project repository directory and link it below.
-            </p>
-          </div>
-
-          <a href="#" id="downloadResumeBtn" className="btn btn-primary" onclick="alert('Resume PDF Notice: Place resume.pdf in your repository directory to enable one-click downloading.'); return false;">
-            <span>Download Resume PDF</span>
-            <span>📥</span>
-          </a>
+        <div className="qual-grid" id="qualificationsContainer">
+          <!-- Dynamic qualification cards from js/data.js -->
         </div>
       </div>
     </section>
@@ -299,15 +268,15 @@
         <div className="section-header">
           <span className="section-tag">Get In Touch</span>
           <h2 className="section-title">Contact &amp; Messages</h2>
-          <p className="section-desc">Send a direct message or log into response management</p>
+          <p className="section-desc">Send a direct message or access response management</p>
         </div>
 
         <div className="contact-grid">
           <!-- Left Column: Public Contact Form -->
           <div className="contact-card">
-            <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Send a Message</h3>
+            <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Send a Message</h3>
             <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;">
-              Messages are saved instantly to Chrome LocalStorage and posted to Google Sheets backend.
+              Submissions are stored in Chrome LocalStorage and posted to Google Sheets backend.
             </p>
 
             <div id="contactAlert" className="alert-message"></div>
@@ -323,14 +292,14 @@
                 <input type="email" id="contactEmail" className="form-input" placeholder="e.g. ramesh@example.com" required />
               </div>
 
-              <!-- Quick Subject Pills -->
+              <!-- Quick Subject Select Pills -->
               <div className="form-group">
-                <label className="form-label">Quick Select Subject</label>
+                <label className="form-label">Subject Quick Select</label>
                 <div className="subject-pills">
                   <span className="pill-opt" data-subject="Freelance Website Development">Freelance Website</span>
                   <span className="pill-opt" data-subject="Full-Stack Application Project">Full-Stack Project</span>
                   <span className="pill-opt" data-subject="Academic Project Inquiry">Academic Inquiry</span>
-                  <span className="pill-opt" data-subject="General Question">General Question</span>
+                  <span className="pill-opt" data-subject="General Inquiry">General Inquiry</span>
                 </div>
                 <input type="text" id="contactSubject" className="form-input" placeholder="e.g. Website Inquiry" required />
               </div>
@@ -342,28 +311,25 @@
 
               <button type="submit" id="contactSubmitBtn" className="btn btn-primary" style="width: 100%;">
                 <span id="submitBtnText">Send Message</span>
-                <span id="submitSpinner" style="display: none;">⏳ Saving Message...</span>
+                <span id="submitSpinner" style="display: none;">Saving Message...</span>
               </button>
             </form>
           </div>
 
-          <!-- Right Column: Admin Access Portal / Response Dashboard -->
+          <!-- Right Column: Admin Access Portal & Response Dashboard -->
           <div id="admin" className="admin-box">
             <!-- State 1: Admin Login Interface -->
             <div id="adminLoginView">
-              <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-                <span style="font-size: 1.75rem;">🔒</span>
-                <h3 style="font-size: 1.35rem;">Admin Access Portal</h3>
-              </div>
-              <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
-                Authorized portal for viewing submitted contact messages.
+              <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Admin Access Portal</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                Demonstration login portal to access submitted contact messages.
               </p>
 
               <div id="adminAlert" className="alert-message"></div>
 
               <form id="adminLoginForm">
                 <div className="form-group">
-                  <label htmlFor="adminUser" className="form-label">Username / Admin Email</label>
+                  <label htmlFor="adminUser" className="form-label">Username</label>
                   <input type="text" id="adminUser" className="form-input" placeholder="admin" required />
                 </div>
 
@@ -374,12 +340,11 @@
 
                 <button type="submit" className="btn btn-secondary" style="width: 100%;">
                   <span>Login to Dashboard</span>
-                  <span>🔓</span>
                 </button>
               </form>
 
-              <div style="margin-top: 1.25rem; font-size: 0.8rem; color: var(--text-subtle); line-height: 1.4;">
-                🛡️ <em>Security Note: Static GitHub Pages frontend uses Google Apps Script web app endpoint for secure spreadsheet database access.</em>
+              <div style="margin-top: 1.25rem; font-size: 0.775rem; color: var(--text-subtle); line-height: 1.4;">
+                🛡️ <em>Security Note: Client-side password checks serve only as a demonstration UI. Production static sites use Google Apps Script web app endpoints for access-controlled spreadsheet operations.</em>
               </div>
             </div>
 
@@ -387,10 +352,10 @@
             <div id="adminDashboardView" className="hidden">
               <div className="dashboard-header">
                 <div>
-                  <h3 style="font-size: 1.35rem;">Submitted Responses</h3>
-                  <p style="color: var(--text-muted); font-size: 0.85rem;">Live messages from Google Sheets / LocalStorage</p>
+                  <h3 style="font-size: 1.25rem;">Submitted Messages</h3>
+                  <p style="color: var(--text-muted); font-size: 0.8rem;">Retrieved from LocalStorage / Google Sheets</p>
                 </div>
-                <button id="logoutAdminBtn" className="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+                <button id="logoutAdminBtn" className="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">
                   Logout
                 </button>
               </div>
@@ -401,18 +366,18 @@
                   type="text" 
                   id="adminSearchInput" 
                   className="form-input" 
-                  placeholder="Filter responses by name or keyword..." 
+                  placeholder="Filter messages..." 
                   style="font-size: 0.85rem; padding: 0.4rem 0.75rem;" 
                 />
                 <button id="exportCsvBtn" className="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; flex-shrink: 0;">
-                  📥 Export CSV
+                  Export CSV
                 </button>
               </div>
 
               <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.85rem; color: var(--text-muted);" id="responseCountText">Total Responses: 0</span>
-                <button id="refreshResponsesBtn" className="btn btn-secondary" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">
-                  🔄 Refresh List
+                <span style="font-size: 0.825rem; color: var(--text-muted);" id="responseCountText">Total Messages: 0</span>
+                <button id="refreshResponsesBtn" className="btn btn-secondary" style="padding: 0.3rem 0.65rem; font-size: 0.775rem;">
+                  Refresh
                 </button>
               </div>
 
@@ -430,7 +395,7 @@
   <footer className="footer">
     <div className="container">
       <p>© <span id="yearSpan">2026</span> Narala Pawan. All rights reserved.</p>
-      <p style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-subtle);">
+      <p style="font-size: 0.8rem; margin-top: 0.4rem; color: var(--text-subtle);">
         Freelance Web Developer | Rajahmundry, Andhra Pradesh, India
       </p>
     </div>
