@@ -1,26 +1,177 @@
 /**
  * Client-Side JavaScript Application - Narala Pawan Portfolio
- * Grounded, human-crafted interactive behaviors and dynamic UI handlers.
+ * Advanced, human-crafted interactive features & dynamic UI components.
  */
 
 const GOOGLE_APPS_SCRIPT_URL = '';
 const LOCAL_STORAGE_KEY = 'portfolioContactResponses';
 const THEME_STORAGE_KEY = 'themePreference';
 
+let soundEnabled = true;
+
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
+  initSoundFX();
+  initHeroCanvas();
+  initHeroTyping();
   initNavigation();
   renderContent();
   initDeveloperTerminal();
   initSkillSearch();
   initProjectFiltersAndModal();
+  initProjectEstimator();
   initContactForm();
   initAdminPortal();
   document.getElementById('yearSpan').textContent = new Date().getFullYear();
 });
 
 /* -------------------------------------------------------------
- * 1. Theme Management (Light/Dark Mode)
+ * 1. Web Audio API Sound FX Synthesizer
+ * ------------------------------------------------------------- */
+function initSoundFX() {
+  const soundBtn = document.getElementById('soundToggleBtn');
+  if (!soundBtn) return;
+
+  soundBtn.addEventListener('click', () => {
+    soundEnabled = !soundEnabled;
+    soundBtn.textContent = soundEnabled ? '🔊' : '🔇';
+    soundBtn.classList.toggle('active', soundEnabled);
+    if (soundEnabled) playAudioTone(600, 0.05);
+  });
+}
+
+function playAudioTone(freq = 440, duration = 0.08) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + duration);
+  } catch (e) {
+    // Silent catch if Web Audio disabled by browser autoplay policies
+  }
+}
+
+/* -------------------------------------------------------------
+ * 2. Interactive Canvas Particle Background
+ * ------------------------------------------------------------- */
+function initHeroCanvas() {
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = canvas.parentElement.offsetHeight || 600;
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = canvas.parentElement.offsetHeight || 600;
+  });
+
+  const particles = [];
+  const particleCount = Math.min(Math.floor(width / 25), 45);
+
+  for (let i = 0; i < particleCount; i++) {
+    particles.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: (Math.random() - 0.5) * 0.6,
+      radius: Math.random() * 2 + 1
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = 'rgba(99, 102, 241, 0.4)';
+    ctx.strokeStyle = 'rgba(99, 102, 241, 0.08)';
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0 || p.x > width) p.vx *= -1;
+      if (p.y < 0 || p.y > height) p.vy *= -1;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+        if (dist < 130) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+}
+
+/* -------------------------------------------------------------
+ * 3. Hero Typing Animation
+ * ------------------------------------------------------------- */
+function initHeroTyping() {
+  const typingElement = document.getElementById('heroTypingText');
+  if (!typingElement) return;
+
+  const phrases = [
+    'Freelance Web Developer',
+    'Full Stack Developer',
+    'React & Java Specialist',
+    'Building for Rajahmundry Businesses'
+  ];
+
+  let phraseIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+
+  function type() {
+    const currentPhrase = phrases[phraseIndex];
+    if (isDeleting) {
+      typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+      charIndex--;
+    } else {
+      typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+      charIndex++;
+    }
+
+    let typeSpeed = isDeleting ? 40 : 80;
+
+    if (!isDeleting && charIndex === currentPhrase.length) {
+      typeSpeed = 1800; // Pause at end of phrase
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      phraseIndex = (phraseIndex + 1) % phrases.length;
+      typeSpeed = 400;
+    }
+
+    setTimeout(type, typeSpeed);
+  }
+
+  type();
+}
+
+/* -------------------------------------------------------------
+ * 4. Theme & Navigation
  * ------------------------------------------------------------- */
 function initTheme() {
   const themeBtn = document.getElementById('themeToggleBtn');
@@ -34,6 +185,7 @@ function initTheme() {
   applyTheme(currentTheme);
 
   themeBtn.addEventListener('click', () => {
+    playAudioTone(700, 0.06);
     currentTheme = htmlTag.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     applyTheme(currentTheme);
     localStorage.setItem(THEME_STORAGE_KEY, currentTheme);
@@ -45,9 +197,6 @@ function initTheme() {
   }
 }
 
-/* -------------------------------------------------------------
- * 2. Mobile Navigation & Scroll Offset
- * ------------------------------------------------------------- */
 function initNavigation() {
   const mobileBtn = document.getElementById('mobileToggleBtn');
   const navMenu = document.getElementById('navMenu');
@@ -59,6 +208,7 @@ function initNavigation() {
 
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
+      playAudioTone(500, 0.05);
       navMenu.classList.remove('active');
       navLinks.forEach(l => l.classList.remove('active'));
       link.classList.add('active');
@@ -67,7 +217,7 @@ function initNavigation() {
 }
 
 /* -------------------------------------------------------------
- * 3. Render Data from PORTFOLIO_DATA (data.js)
+ * 5. Render Data & Interactive Project Simulators
  * ------------------------------------------------------------- */
 function renderContent() {
   if (typeof PORTFOLIO_DATA === 'undefined') return;
@@ -84,10 +234,7 @@ function renderContent() {
       `).join('');
   }
 
-  // Render Skills
   renderSkills(PORTFOLIO_DATA.skills);
-
-  // Render Projects
   renderProjects(PORTFOLIO_DATA.projects);
 }
 
@@ -119,41 +266,141 @@ function renderProjects(projectsArray) {
   if (!projectsContainer || !projectsArray) return;
 
   projectsContainer.innerHTML = projectsArray
-    .map(proj => `
-      <div className="project-card" data-project-id="${proj.id}" data-category="${proj.category}">
-        <div className="project-top">
-          <span className="project-icon">${proj.icon}</span>
-          <span className="project-badge" style="background-color: ${proj.badgeColor}">${escapeHTML(proj.categoryLabel)}</span>
-        </div>
-        <h3 className="project-title">${escapeHTML(proj.title)}</h3>
-        <p className="project-desc">${escapeHTML(proj.shortDesc)}</p>
-        <div className="project-tags-row">
-          ${proj.techStack.slice(0, 3).map(t => `<span className="project-mini-tag">${escapeHTML(t)}</span>`).join('')}
-        </div>
-        <div className="project-footer">
-          <span>Click to View Full Specs</span>
-          <span>🔍</span>
-        </div>
-      </div>
-    `).join('');
+    .map(proj => {
+      let simHtml = '';
+      if (proj.id === 'rfid-door-lock') {
+        simHtml = `
+          <div className="card-simulator-box">
+            <button className="sim-btn btn-secondary" onclick="event.stopPropagation(); simulateRFIDScan('${proj.id}')">
+              <span>💳 Scan NFC Test Card</span>
+            </button>
+            <div id="sim-status-${proj.id}" className="sim-status" style="color: var(--text-muted);">
+              Lock Status: 🔒 Secured (Standby)
+            </div>
+          </div>
+        `;
+      } else if (proj.id === 'pothole-detection') {
+        simHtml = `
+          <div className="card-simulator-box">
+            <button className="sim-btn btn-secondary" onclick="event.stopPropagation(); simulatePotholeScan('${proj.id}')">
+              <span>🎥 Toggle Dashcam AI Feed</span>
+            </button>
+            <div id="sim-status-${proj.id}" className="sim-status" style="color: var(--text-muted);">
+              Vision Feed: 🟢 Clear Road (No Anomalies)
+            </div>
+          </div>
+        `;
+      } else if (proj.id === 'counterfeit-detection') {
+        simHtml = `
+          <div className="card-simulator-box">
+            <button className="sim-btn btn-secondary" onclick="event.stopPropagation(); simulateBlockchainVerify('${proj.id}')">
+              <span>🔍 Verify Serial #NX-8921</span>
+            </button>
+            <div id="sim-status-${proj.id}" className="sim-status" style="color: var(--text-muted);">
+              Ledger Status: ⚪ Awaiting Scan
+            </div>
+          </div>
+        `;
+      } else if (proj.id === 'helmet-power-lensed') {
+        simHtml = `
+          <div className="card-simulator-box">
+            <button className="sim-btn btn-secondary" onclick="event.stopPropagation(); simulateVisorToggle('${proj.id}')">
+              <span>🕶️ Switch Visor Optic Mode</span>
+            </button>
+            <div id="sim-status-${proj.id}" className="sim-status" style="color: var(--text-muted);">
+              Visor Mode: ☀️ Day UV Shield
+            </div>
+          </div>
+        `;
+      }
 
-  // Add Click Listener to open modal
-  document.querySelectorAll('.project-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const projId = card.getAttribute('data-project-id');
-      openProjectModal(projId);
-    });
-  });
+      return `
+        <div className="project-card" data-project-id="${proj.id}" data-category="${proj.category}">
+          <div className="project-top">
+            <span className="project-icon">${proj.icon}</span>
+            <span className="project-badge" style="background-color: ${proj.badgeColor}">${escapeHTML(proj.categoryLabel)}</span>
+          </div>
+          <h3 className="project-title">${escapeHTML(proj.title)}</h3>
+          <p className="project-desc">${escapeHTML(proj.shortDesc)}</p>
+          
+          ${simHtml}
+
+          <div className="project-tags-row">
+            ${proj.techStack.slice(0, 3).map(t => `<span className="project-mini-tag">${escapeHTML(t)}</span>`).join('')}
+          </div>
+          <div className="project-footer" onclick="openProjectModal('${proj.id}')">
+            <span>View Technical Architecture & Specs</span>
+            <span>➔</span>
+          </div>
+        </div>
+      `;
+    }).join('');
 }
 
+/* Simulator Actions */
+window.simulateRFIDScan = function(projId) {
+  playAudioTone(880, 0.12);
+  const statusEl = document.getElementById(`sim-status-${projId}`);
+  if (!statusEl) return;
+  statusEl.innerHTML = '⚡ Scanning NFC UID [4B:8A:1C:99]...';
+  statusEl.style.color = '#38bdf8';
+
+  setTimeout(() => {
+    playAudioTone(1200, 0.15);
+    statusEl.innerHTML = '🔓 Lock Status: <strong>UNLOCKED [Access Granted]</strong>';
+    statusEl.style.color = '#10b981';
+  }, 700);
+};
+
+window.simulatePotholeScan = function(projId) {
+  playAudioTone(600, 0.1);
+  const statusEl = document.getElementById(`sim-status-${projId}`);
+  if (!statusEl) return;
+  statusEl.innerHTML = '🔍 Processing Canny Contours...';
+  statusEl.style.color = '#38bdf8';
+
+  setTimeout(() => {
+    playAudioTone(750, 0.1);
+    statusEl.innerHTML = '⚠️ Vision Feed: <strong>Pothole Detected (Lat: 16.98, Lon: 81.78)</strong>';
+    statusEl.style.color = '#f59e0b';
+  }, 600);
+};
+
+window.simulateBlockchainVerify = function(projId) {
+  playAudioTone(700, 0.1);
+  const statusEl = document.getElementById(`sim-status-${projId}`);
+  if (!statusEl) return;
+  statusEl.innerHTML = '🔗 Querying Smart Contract Hash...';
+  statusEl.style.color = '#38bdf8';
+
+  setTimeout(() => {
+    playAudioTone(950, 0.12);
+    statusEl.innerHTML = '✅ Ledger: <strong>Authentic Product Verified On-Chain</strong>';
+    statusEl.style.color = '#10b981';
+  }, 650);
+};
+
+window.simulateVisorToggle = function(projId) {
+  playAudioTone(650, 0.08);
+  const statusEl = document.getElementById(`sim-status-${projId}`);
+  if (!statusEl) return;
+  const isNight = statusEl.innerHTML.includes('Night');
+  if (isNight) {
+    statusEl.innerHTML = 'Visor Mode: ☀️ Day UV Shield';
+    statusEl.style.color = 'var(--text-muted)';
+  } else {
+    statusEl.innerHTML = 'Visor Mode: 🌙 Night High-Contrast Optic';
+    statusEl.style.color = '#a7f3d0';
+  }
+};
+
 /* -------------------------------------------------------------
- * 4. Interactive Developer Terminal Widget
+ * 6. Interactive Developer Terminal
  * ------------------------------------------------------------- */
 function initDeveloperTerminal() {
   const terminalBody = document.getElementById('terminalBody');
   if (!terminalBody) return;
 
-  // Print initial terminal intro
   const introLines = PORTFOLIO_DATA?.profile?.terminalIntro || [
     'Welcome to Narala Pawan\'s Terminal'
   ];
@@ -161,9 +408,9 @@ function initDeveloperTerminal() {
   terminalBody.innerHTML = introLines.map(l => `<div className="terminal-line system">${escapeHTML(l)}</div>`).join('');
   appendPromptLine();
 
-  // Add Event Listeners for Quick Command Chips
   document.querySelectorAll('.chip-cmd').forEach(chip => {
     chip.addEventListener('click', () => {
+      playAudioTone(650, 0.05);
       const cmd = chip.getAttribute('data-cmd');
       executeCommand(cmd);
     });
@@ -181,10 +428,10 @@ function appendPromptLine() {
   terminalBody.appendChild(promptRow);
 
   const input = promptRow.querySelector('.terminal-input');
-  input.focus();
 
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
+      playAudioTone(700, 0.05);
       const cmd = input.value.trim().toLowerCase();
       input.disabled = true;
       executeCommand(cmd);
@@ -196,7 +443,6 @@ function executeCommand(cmd) {
   const terminalBody = document.getElementById('terminalBody');
   if (!cmd) return;
 
-  // Log user command
   const userLine = document.createElement('div');
   userLine.className = 'terminal-line';
   userLine.innerHTML = `<span className="prompt-symbol">$</span> ${escapeHTML(cmd)}`;
@@ -238,7 +484,7 @@ function executeCommand(cmd) {
 }
 
 /* -------------------------------------------------------------
- * 5. Interactive Skill Search Filter
+ * 7. Interactive Skill Search & Project Filters
  * ------------------------------------------------------------- */
 function initSkillSearch() {
   const searchInput = document.getElementById('skillSearchInput');
@@ -259,19 +505,17 @@ function initSkillSearch() {
   });
 }
 
-/* -------------------------------------------------------------
- * 6. Interactive Project Category Filters & Details Modal
- * ------------------------------------------------------------- */
 function initProjectFiltersAndModal() {
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const projectCards = document.querySelectorAll('.project-card');
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
+      playAudioTone(600, 0.05);
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
       const filterCategory = btn.getAttribute('data-filter');
+      const projectCards = document.querySelectorAll('.project-card');
 
       projectCards.forEach(card => {
         const cardCategory = card.getAttribute('data-category');
@@ -284,14 +528,10 @@ function initProjectFiltersAndModal() {
     });
   });
 
-  // Modal Controls
   const modal = document.getElementById('projectModal');
   const closeBtn = document.getElementById('modalCloseBtn');
 
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeProjectModal);
-  }
-
+  if (closeBtn) closeBtn.addEventListener('click', closeProjectModal);
   if (modal) {
     modal.addEventListener('click', (e) => {
       if (e.target === modal) closeProjectModal();
@@ -299,7 +539,8 @@ function initProjectFiltersAndModal() {
   }
 }
 
-function openProjectModal(projectId) {
+window.openProjectModal = function(projectId) {
+  playAudioTone(700, 0.08);
   const modal = document.getElementById('projectModal');
   const modalBody = document.getElementById('modalBody');
   if (!modal || !modalBody || typeof PORTFOLIO_DATA === 'undefined') return;
@@ -345,15 +586,69 @@ function openProjectModal(projectId) {
   `;
 
   modal.classList.add('open');
-}
+};
 
 function closeProjectModal() {
+  playAudioTone(450, 0.05);
   const modal = document.getElementById('projectModal');
   if (modal) modal.classList.remove('open');
 }
 
 /* -------------------------------------------------------------
- * 7. Contact Form Handler & Subject Select Pills
+ * 8. Interactive Project Estimator Widget
+ * ------------------------------------------------------------- */
+function initProjectEstimator() {
+  const options = document.querySelectorAll('.est-option');
+  const amountSpan = document.getElementById('estAmount');
+  const timeSpan = document.getElementById('estTime');
+  const preFillBtn = document.getElementById('estPreFillBtn');
+  if (!options.length || !amountSpan || !timeSpan) return;
+
+  options.forEach(opt => {
+    opt.addEventListener('click', () => {
+      playAudioTone(650, 0.05);
+      opt.classList.toggle('selected');
+      const checkSpan = opt.querySelector('.est-check');
+      if (checkSpan) checkSpan.textContent = opt.classList.contains('selected') ? '✓' : '○';
+      recalculateEstimate();
+    });
+  });
+
+  function recalculateEstimate() {
+    let totalPrice = 0;
+    let totalDays = 0;
+    const selectedNames = [];
+
+    document.querySelectorAll('.est-option.selected').forEach(opt => {
+      totalPrice += parseInt(opt.getAttribute('data-price') || 0);
+      totalDays += parseInt(opt.getAttribute('data-days') || 0);
+      selectedNames.push(opt.getAttribute('data-name'));
+    });
+
+    amountSpan.textContent = `₹${totalPrice.toLocaleString('en-IN')} INR`;
+    timeSpan.textContent = `Estimated Delivery: ${totalDays > 0 ? totalDays : 0} Days`;
+
+    if (preFillBtn) {
+      preFillBtn.onclick = () => {
+        playAudioTone(700, 0.08);
+        const subjectInput = document.getElementById('contactSubject');
+        const messageInput = document.getElementById('contactMessage');
+        const contactSection = document.getElementById('contact');
+
+        if (subjectInput) subjectInput.value = 'Freelance Project Quote Request';
+        if (messageInput) {
+          messageInput.value = `Hi Pawan,\n\nI would like to request a quote for the following requirements:\n- ${selectedNames.join('\n- ')}\n\nEstimated Investment: ₹${totalPrice.toLocaleString('en-IN')} INR\nEstimated Delivery: ${totalDays} Days\n\nPlease let me know your availability.`;
+        }
+        if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
+      };
+    }
+  }
+
+  recalculateEstimate();
+}
+
+/* -------------------------------------------------------------
+ * 9. Contact Form & Admin Portal
  * ------------------------------------------------------------- */
 function initContactForm() {
   const form = document.getElementById('contactForm');
@@ -363,9 +658,9 @@ function initContactForm() {
   const btnSpinner = document.getElementById('submitSpinner');
   const subjectInput = document.getElementById('contactSubject');
 
-  // Quick Subject Pills Selection
   document.querySelectorAll('.pill-opt').forEach(pill => {
     pill.addEventListener('click', () => {
+      playAudioTone(600, 0.05);
       document.querySelectorAll('.pill-opt').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
       subjectInput.value = pill.getAttribute('data-subject');
@@ -382,15 +677,18 @@ function initContactForm() {
     const message = document.getElementById('contactMessage').value.trim();
 
     if (!name || !email || !subject || !message) {
+      playAudioTone(350, 0.1);
       showAlert(alertBox, 'Please fill out all required form fields.', 'error');
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      playAudioTone(350, 0.1);
       showAlert(alertBox, 'Please enter a valid email address.', 'error');
       return;
     }
 
+    playAudioTone(850, 0.1);
     submitBtn.disabled = true;
     btnText.style.display = 'none';
     btnSpinner.style.display = 'inline-block';
@@ -458,9 +756,6 @@ function getFromLocalStorage() {
   }
 }
 
-/* -------------------------------------------------------------
- * 8. Admin Portal & CSV Export Functionality
- * ------------------------------------------------------------- */
 function initAdminPortal() {
   const loginForm = document.getElementById('adminLoginForm');
   const loginView = document.getElementById('adminLoginView');
@@ -479,21 +774,25 @@ function initAdminPortal() {
     const pass = document.getElementById('adminPass').value.trim();
 
     if (user === 'admin' && pass === 'pawan123') {
+      playAudioTone(900, 0.1);
       loginView.classList.add('hidden');
       dashboardView.classList.remove('hidden');
       loadAdminResponses();
     } else {
+      playAudioTone(350, 0.1);
       showAlert(adminAlert, 'Invalid administrator credentials. Try username: admin, password: pawan123', 'error');
     }
   });
 
   logoutBtn.addEventListener('click', () => {
+    playAudioTone(500, 0.05);
     dashboardView.classList.add('hidden');
     loginView.classList.remove('hidden');
     loginForm.reset();
   });
 
   refreshBtn.addEventListener('click', () => {
+    playAudioTone(600, 0.05);
     loadAdminResponses();
   });
 
@@ -549,6 +848,7 @@ function loadAdminResponses(filterQuery = '') {
 }
 
 function exportResponsesToCSV() {
+  playAudioTone(800, 0.1);
   const responses = getFromLocalStorage();
   if (responses.length === 0) {
     alert('No contact responses available to export.');
@@ -577,17 +877,6 @@ function exportResponsesToCSV() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-}
-
-/* Helper Functions */
-function showAlert(element, text, type) {
-  element.textContent = text;
-  element.className = `alert-message alert-${type} show`;
-}
-
-function hideAlert(element) {
-  element.className = 'alert-message';
-  element.textContent = '';
 }
 
 function escapeHTML(str) {

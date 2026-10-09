@@ -13,6 +13,7 @@
   --primary-light: rgba(99, 102, 241, 0.15);
   --accent-color: #06b6d4;
   --accent-green: #10b981;
+  --accent-pink: #ec4899;
   --border-color: rgba(255, 255, 255, 0.08);
   --border-color-hover: rgba(255, 255, 255, 0.22);
   --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
@@ -21,7 +22,7 @@
   --badge-bg: rgba(99, 102, 241, 0.15);
   --badge-text: #818cf8;
   --terminal-bg: #090d16;
-  --radius-lg: 16px;
+  --radius-lg: 18px;
   --radius-md: 12px;
   --radius-sm: 8px;
   --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -41,6 +42,7 @@
   --primary-light: #e0e7ff;
   --accent-color: #0284c7;
   --accent-green: #059669;
+  --accent-pink: #db2777;
   --border-color: #e2e8f0;
   --border-color-hover: #cbd5e1;
   --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
@@ -70,6 +72,7 @@ body {
   line-height: 1.6;
   transition: background-color 0.3s ease, color 0.3s ease;
   overflow-x: hidden;
+  position: relative;
 }
 
 .container {
@@ -96,6 +99,18 @@ a:hover {
   color: var(--primary-hover);
 }
 
+/* Canvas Background */
+#heroCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
 /* Buttons */
 .btn {
   display: inline-flex;
@@ -110,18 +125,20 @@ a:hover {
   border: none;
   transition: var(--transition);
   font-family: inherit;
+  position: relative;
+  z-index: 1;
 }
 
 .btn-primary {
   background: var(--primary-color);
   color: #ffffff;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
 }
 
 .btn-primary:hover {
   background: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
 }
 
 .btn-secondary {
@@ -174,6 +191,7 @@ a:hover {
   justify-content: center;
   font-weight: 700;
   font-size: 1.1rem;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
 }
 
 .brand-info {
@@ -220,31 +238,39 @@ a:hover {
   height: 2px;
   background: var(--primary-color);
   border-radius: 999px;
+  box-shadow: 0 0 8px var(--primary-color);
 }
 
 .nav-controls {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
-.theme-toggle-btn {
+.ctrl-btn {
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   transition: var(--transition);
 }
 
-.theme-toggle-btn:hover {
-  transform: rotate(15deg) scale(1.05);
+.ctrl-btn:hover {
+  transform: scale(1.1);
+  border-color: var(--primary-color);
+}
+
+.ctrl-btn.active {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .mobile-toggle {
@@ -256,9 +282,11 @@ a:hover {
   cursor: pointer;
 }
 
-/* Common Section Layout */
+/* Sections */
 .section {
   padding: 5rem 0;
+  position: relative;
+  z-index: 1;
 }
 
 .section-header {
@@ -278,6 +306,7 @@ a:hover {
   padding: 0.35rem 0.9rem;
   border-radius: 9999px;
   margin-bottom: 0.75rem;
+  border: 1px solid rgba(99, 102, 241, 0.2);
 }
 
 .section-title {
@@ -290,13 +319,14 @@ a:hover {
   font-size: 1.05rem;
 }
 
-/* Hero Section with Grid Layout */
+/* Hero Section */
 .hero-section {
   padding-top: 7.5rem;
   padding-bottom: 4rem;
   min-height: 88vh;
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .hero-grid {
@@ -304,6 +334,8 @@ a:hover {
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: center;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-content {
@@ -327,17 +359,32 @@ a:hover {
   font-size: 3.25rem;
   font-weight: 800;
   letter-spacing: -0.03em;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   background: linear-gradient(135deg, var(--text-main) 30%, var(--primary-color) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.hero-role {
+.typing-container {
+  height: 2.2rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.hero-typing {
   font-size: 1.35rem;
   font-weight: 600;
   color: var(--accent-color);
-  margin-bottom: 1.25rem;
+  font-family: var(--font-mono);
+  border-right: 2px solid var(--accent-color);
+  white-space: nowrap;
+  animation: blinkCursor 0.75s infinite;
+}
+
+@keyframes blinkCursor {
+  0%, 100% { border-color: var(--accent-color); }
+  50% { border-color: transparent; }
 }
 
 .hero-bio {
@@ -361,6 +408,12 @@ a:hover {
   overflow: hidden;
   box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
   font-family: var(--font-mono);
+  transition: var(--transition);
+}
+
+.developer-terminal:hover {
+  border-color: var(--border-color-hover);
+  box-shadow: 0 25px 50px -10px rgba(99, 102, 241, 0.2);
 }
 
 .terminal-header {
@@ -505,7 +558,7 @@ a:hover {
   border-color: var(--primary-color);
 }
 
-/* Skills Controls & Grid */
+/* Skills Search & Cards */
 .skills-controls {
   max-width: 500px;
   margin: 0 auto 2.5rem auto;
@@ -611,7 +664,7 @@ a:hover {
   border-radius: 4px;
 }
 
-/* Projects Interactive Filter & Cards */
+/* Projects Section & Interactive Simulators */
 .project-filters {
   display: flex;
   flex-wrap: wrap;
@@ -624,7 +677,7 @@ a:hover {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   color: var(--text-muted);
-  padding: 0.5rem 1.25rem;
+  padding: 0.55rem 1.35rem;
   border-radius: 9999px;
   font-size: 0.9rem;
   font-weight: 600;
@@ -637,7 +690,7 @@ a:hover {
   background: var(--primary-color);
   color: #ffffff;
   border-color: var(--primary-color);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
 }
 
 .projects-grid {
@@ -655,7 +708,8 @@ a:hover {
   flex-direction: column;
   box-shadow: var(--card-shadow);
   transition: var(--transition);
-  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
 .project-card:hover {
@@ -690,8 +744,39 @@ a:hover {
 .project-desc {
   color: var(--text-muted);
   font-size: 0.95rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   flex-grow: 1;
+}
+
+/* Interactive Card Quick Simulator Area */
+.card-simulator-box {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.sim-btn {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.sim-status {
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  text-align: center;
+  font-weight: 600;
 }
 
 .project-tags-row {
@@ -720,9 +805,65 @@ a:hover {
   justify-content: space-between;
   align-items: center;
   font-weight: 600;
+  cursor: pointer;
 }
 
-/* Interactive Project Modal Overlay */
+/* Project Estimator Widget */
+.estimator-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--card-shadow);
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.estimator-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.est-option {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.est-option:hover, .est-option.selected {
+  border-color: var(--primary-color);
+  background: var(--primary-light);
+}
+
+.est-option.selected .est-check {
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.est-result-box {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.est-amount {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--accent-green);
+}
+
+/* Project Details Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -789,7 +930,7 @@ a:hover {
   background: var(--border-color);
 }
 
-/* Resume Box */
+/* Resume Section */
 .resume-box {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
@@ -817,7 +958,7 @@ a:hover {
   text-align: left;
 }
 
-/* Contact & Subject Select Pills */
+/* Contact Grid & Admin Dashboard */
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -917,7 +1058,7 @@ a:hover {
   border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-/* Admin Dashboard Table & Items */
+/* Admin Dashboard Table */
 .hidden {
   display: none !important;
 }
@@ -978,6 +1119,8 @@ a:hover {
   text-align: center;
   font-size: 0.9rem;
   color: var(--text-muted);
+  position: relative;
+  z-index: 1;
 }
 
 /* Respect Prefers Reduced Motion */

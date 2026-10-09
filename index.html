@@ -35,14 +35,16 @@
           <li><a href="#about" className="nav-link">About</a></li>
           <li><a href="#skills" className="nav-link">Skills</a></li>
           <li><a href="#projects" className="nav-link">Projects</a></li>
+          <li><a href="#estimator" className="nav-link">Cost Estimator</a></li>
           <li><a href="#resume" className="nav-link">Resume</a></li>
           <li><a href="#contact" className="nav-link">Contact</a></li>
-          <li><a href="#admin" className="nav-link">Admin Portal</a></li>
+          <li><a href="#admin" className="nav-link">Admin</a></li>
         </ul>
       </nav>
 
       <div className="nav-controls">
-        <button id="themeToggleBtn" className="theme-toggle-btn" aria-label="Toggle Light/Dark Theme">
+        <button id="soundToggleBtn" className="ctrl-btn" title="Toggle Sound FX">🔊</button>
+        <button id="themeToggleBtn" className="ctrl-btn" title="Toggle Light/Dark Theme">
           <span id="themeIcon">☀️</span>
         </button>
         <button id="mobileToggleBtn" className="mobile-toggle" aria-label="Toggle Navigation Menu">
@@ -55,17 +57,24 @@
   <main>
     <!-- Hero Section -->
     <section id="home" className="hero-section">
+      <!-- Interactive Particle Canvas -->
+      <canvas id="heroCanvas"></canvas>
+
       <div className="container">
         <div className="hero-grid">
-          <!-- Left: Hero Text & Intro -->
+          <!-- Left: Hero Text & Typing Animation -->
           <div className="hero-content">
             <div className="hero-location">
               <span>📍 Rajahmundry, Andhra Pradesh, India</span>
             </div>
             <h1 className="hero-name">Narala Pawan</h1>
-            <h2 className="hero-role">Freelance Web Developer | Full Stack Developer</h2>
+            
+            <div className="typing-container">
+              <span id="heroTypingText" className="hero-typing"></span>
+            </div>
+
             <p className="hero-bio">
-              Building practical web applications and hardware-integrated software projects. Specializing in frontend interfaces, Java backend services, and custom websites for local businesses.
+              Developing functional web applications and hardware-integrated software prototypes. Building responsive websites for local businesses and modern full-stack systems.
             </p>
             <div className="hero-actions">
               <a href="#contact" className="btn btn-primary">
@@ -75,6 +84,10 @@
               <a href="#projects" className="btn btn-secondary">
                 <span>Explore Projects</span>
                 <span>🚀</span>
+              </a>
+              <a href="#estimator" className="btn btn-secondary">
+                <span>Estimate Project Cost</span>
+                <span>🧮</span>
               </a>
             </div>
           </div>
@@ -160,7 +173,7 @@
         <div className="section-header">
           <span className="section-tag">Featured Work</span>
           <h2 className="section-title">Academic &amp; Hardware Projects</h2>
-          <p className="section-desc">Click any project card to inspect technical specifications and circuit components</p>
+          <p className="section-desc">Test the live interactive simulators embedded directly inside each project card below!</p>
         </div>
 
         <!-- Interactive Project Filter Tabs -->
@@ -188,8 +201,69 @@
       </div>
     </div>
 
+    <!-- Interactive Project Cost & Estimator Widget Section -->
+    <section id="estimator" className="section" style="background: rgba(255, 255, 255, 0.015);">
+      <div className="container">
+        <div className="section-header">
+          <span className="section-tag">Freelance Calculator</span>
+          <h2 className="section-title">Interactive Project Estimator</h2>
+          <p className="section-desc">Select requirements to calculate an instant cost &amp; timeline estimate for local business websites</p>
+        </div>
+
+        <div className="estimator-card">
+          <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Select Website Features &amp; Scope:</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Tailored rates for small businesses &amp; local enterprises in AP</p>
+
+          <div className="estimator-options" id="estimatorOptions">
+            <div className="est-option selected" data-price="3500" data-days="3" data-name="Responsive Landing Page">
+              <span className="est-check">✓</span>
+              <div>
+                <strong style="display: block; font-size: 0.95rem;">Single Landing Page</strong>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Fast, mobile-ready single page</span>
+              </div>
+            </div>
+
+            <div className="est-option" data-price="8000" data-days="6" data-name="Multi-Page Business Website">
+              <span className="est-check">○</span>
+              <div>
+                <strong style="display: block; font-size: 0.95rem;">Multi-Page Site (3-5 Pages)</strong>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Home, About, Services, Contact</span>
+              </div>
+            </div>
+
+            <div className="est-option" data-price="4000" data-days="2" data-name="Google Sheets Contact Backend">
+              <span className="est-check">○</span>
+              <div>
+                <strong style="display: block; font-size: 0.95rem;">Database Integration</strong>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Google Sheets / MySQL form storage</span>
+              </div>
+            </div>
+
+            <div className="est-option" data-price="6000" data-days="4" data-name="React SPA & Component Design">
+              <span className="est-check">○</span>
+              <div>
+                <strong style="display: block; font-size: 0.95rem;">React Application</strong>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Dynamic state UI & animations</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="est-result-box">
+            <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.3rem;">Estimated Project Investment &amp; Duration</div>
+            <div className="est-amount" id="estAmount">₹3,500 INR</div>
+            <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-top: 0.3rem;" id="estTime">Estimated Delivery: 3 Days</div>
+            
+            <button id="estPreFillBtn" className="btn btn-primary" style="margin-top: 1.25rem;">
+              <span>Request This Quote in Contact Form</span>
+              <span>✉️</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Resume Section -->
-    <section id="resume" className="section" style="background: rgba(255, 255, 255, 0.015);">
+    <section id="resume" className="section">
       <div className="container">
         <div className="section-header">
           <span className="section-tag">Curriculum Vitae</span>
